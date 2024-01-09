@@ -1,8 +1,11 @@
+use lazy_static::lazy_static;
+
 pub mod forked_node;
 pub mod local_node;
 
-/// The default node URL that should be used for e2e tests.
-pub const NODE_HOST: &str = "http://127.0.0.1:8545";
+lazy_static! {
+    pub static ref NODE_PORT: u16 = portpicker::pick_unused_port().unwrap_or(8000);
+}
 
 /// A blockchain node for development purposes. Dropping this type will
 /// terminate the node.
@@ -14,10 +17,16 @@ impl Node {
     /// Spawns a new node that is forked from the given URL at `block_number` or
     /// if not set, latest.
     pub async fn forked(fork: impl reqwest::IntoUrl, block_number: Option<u64>) -> Self {
-        let mut args = ["--port", "8545", "--fork-url", fork.as_str()]
-            .into_iter()
-            .map(String::from)
-            .collect::<Vec<_>>();
+        tracing::info!("port: {}", NODE_PORT.to_string());
+        let mut args = [
+            "--port",
+            &NODE_PORT.to_string(),
+            "--fork-url",
+            fork.as_str(),
+        ]
+        .into_iter()
+        .map(String::from)
+        .collect::<Vec<_>>();
 
         if let Some(block_number) = block_number {
             args.extend(["--fork-block-number".to_string(), block_number.to_string()]);
@@ -30,7 +39,7 @@ impl Node {
     pub async fn new() -> Self {
         Self::spawn_process(&[
             "--port",
-            "8545",
+            &NODE_PORT.to_string(),
             "--gas-price",
             "1",
             "--gas-limit",

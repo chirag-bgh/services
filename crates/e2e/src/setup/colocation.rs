@@ -1,5 +1,7 @@
+use crate::nodes::NODE_PORT;
+
 use {
-    crate::{nodes::NODE_HOST, setup::*},
+    crate::setup::*,
     ethcontract::{H160, H256},
     reqwest::Url,
     shared::sources::uniswap_v2::UNISWAP_INIT,
@@ -101,10 +103,11 @@ mempool = "public"
         contracts.uniswap_v2_router.address(),
         H256(UNISWAP_INIT),
     ));
+    let node_host = format!("http://localhost:{:?}", *NODE_PORT);
     let args = vec![
         "driver".to_string(),
         format!("--config={}", config_file.display()),
-        format!("--ethrpc={NODE_HOST}"),
+        format!("--ethrpc={node_host}"),
     ];
 
     tokio::task::spawn(async move {
