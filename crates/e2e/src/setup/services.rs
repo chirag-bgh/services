@@ -1,10 +1,13 @@
 use {
     super::TestAccount,
-    crate::setup::{
-        colocation::{self, SolverEngine},
-        wait_for_condition,
-        Contracts,
-        TIMEOUT,
+    crate::{
+        nodes::NODE_PORT,
+        setup::{
+            colocation::{self, SolverEngine},
+            wait_for_condition,
+            Contracts,
+            TIMEOUT,
+        },
     },
     autopilot::infra::persistence::auction::dto,
     clap::Parser,
@@ -57,6 +60,7 @@ impl<'a> Services<'a> {
             "--native-price-estimators=Baseline".to_string(),
             "--amount-to-estimate-prices-with=1000000000000000000".to_string(),
             "--block-stream-poll-interval=1s".to_string(),
+            format!("--node-url=http://localhost:{}", NODE_PORT.to_string()),
         ]
         .into_iter()
     }
