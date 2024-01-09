@@ -33,6 +33,8 @@ tempfile = "3.3.0"
 tokio = { workspace = true, features = ["macros"] }
 tracing = { workspace = true }
 web3 = { workspace = true }
+portpicker = { workspace = true }
+lazy_static = { workspace = true }
 
 [dev-dependencies]
 app-data-hash = { path = "../app-data-hash" }

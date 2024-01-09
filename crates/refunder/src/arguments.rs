@@ -43,7 +43,7 @@ pub struct Arguments {
     pub db_url: Url,
 
     /// The Ethereum node URL to connect to.
-    #[clap(long, env, default_value = "http://localhost:8545")]
+    #[clap(long, env, default_value = "http://localhost:1")]
     pub node_url: Url,
 
     /// The expected chain ID that the services are expected to run against.

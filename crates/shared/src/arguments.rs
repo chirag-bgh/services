@@ -171,7 +171,7 @@ pub struct Arguments {
     pub logging: LoggingArguments,
 
     /// The Ethereum node URL to connect to.
-    #[clap(long, env, default_value = "http://localhost:8545")]
+    #[clap(long, env, default_value = "http://localhost:78")]
     pub node_url: Url,
 
     /// The base URL used to connect to subgraph clients.

@@ -5,7 +5,7 @@ pub mod onchain_components;
 mod services;
 
 use {
-    crate::nodes::{Node, NODE_HOST},
+    crate::nodes::{Node, NODE_PORT},
     anyhow::{anyhow, Result},
     ethcontract::futures::FutureExt,
     shared::ethrpc::{create_test_transport, Web3},
@@ -179,8 +179,8 @@ async fn run<F, Fut, T>(
         // panics
         let _ = node_panic_handle.lock().unwrap().take();
     }));
-
-    let http = create_test_transport(NODE_HOST);
+    let node_host = format!("http://localhost:{}", NODE_PORT.to_string());
+    let http = create_test_transport(&node_host);
     let web3 = Web3::new(http);
 
     services::clear_database().await;
