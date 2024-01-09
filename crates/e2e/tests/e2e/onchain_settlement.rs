@@ -90,10 +90,12 @@ async fn onchain_settlement(web3: Web3) {
             endpoint: solver_endpoint,
         }],
     );
+    let test_solver_port = portpicker::pick_unused_port().unwrap();
     services
-        .start_api(vec![
-            "--price-estimation-drivers=test_solver|http://localhost:11088/test_solver".to_string(),
-        ])
+        .start_api(vec![format!(
+            "--price-estimation-drivers=test_solver|http://localhost:{}/test_solver",
+            test_solver_port.to_string()
+        )])
         .await;
 
     let order_a = OrderCreation {
@@ -134,9 +136,10 @@ async fn onchain_settlement(web3: Web3) {
     // batch which seems to be expected in this test.
     // However, this currently does not work because the driver will not merge the
     // individual solutions because the token prices don't match after scaling.
-    services.start_autopilot(vec![
-        "--drivers=test_solver|http://localhost:11088/test_solver".to_string(),
-    ]);
+    services.start_autopilot(vec![format!(
+        "--drivers=test_solver|http://localhost:{}/test_solver",
+        test_solver_port.to_string()
+    )]);
 
     let balance = token_b.balance_of(trader_a.address()).call().await.unwrap();
     assert_eq!(balance, 0.into());

@@ -54,6 +54,7 @@ async fn onchain_settlement_without_liquidity(web3: Web3) {
         }],
     );
     let services = Services::new(onchain.contracts()).await;
+    let test_solver_port = portpicker::pick_unused_port().unwrap();
     services.start_autopilot(vec![
         format!(
             "--trusted-tokens={weth:#x},{token_a:#x},{token_b:#x}",
@@ -61,7 +62,10 @@ async fn onchain_settlement_without_liquidity(web3: Web3) {
             token_a = token_a.address(),
             token_b = token_b.address()
         ),
-        "--drivers=test_solver|http://localhost:11088/test_solver".to_string(),
+        format!(
+            "--drivers=test_solver|http://localhost:{}/test_solver",
+            test_solver_port.to_string()
+        ),
     ]);
     services.start_api(vec![]).await;
 

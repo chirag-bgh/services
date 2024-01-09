@@ -144,12 +144,15 @@ impl<'a> Services<'a> {
                 endpoint: solver_endpoint,
             }],
         );
-        self.start_autopilot(vec![
-            "--drivers=test_solver|http://localhost:11088/test_solver".to_string(),
-        ]);
-        self.start_api(vec![
-            "--price-estimation-drivers=test_solver|http://localhost:11088/test_solver".to_string(),
-        ])
+        let test_solver_port = portpicker::pick_unused_port().unwrap();
+        self.start_autopilot(vec![format!(
+            "--drivers=test_solver|http://localhost:{}/test_solver",
+            test_solver_port.to_string()
+        )]);
+        self.start_api(vec![format!(
+            "--price-estimation-drivers=test_solver|http://localhost:{}/test_solver",
+            test_solver_port.to_string()
+        )])
         .await;
     }
 
