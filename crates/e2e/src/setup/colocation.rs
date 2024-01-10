@@ -1,7 +1,5 @@
-use crate::nodes::NODE_PORT;
-
 use {
-    crate::setup::*,
+    crate::{nodes::NODE_PORT, setup::*},
     ethcontract::{H160, H256},
     reqwest::Url,
     shared::sources::uniswap_v2::UNISWAP_INIT,
